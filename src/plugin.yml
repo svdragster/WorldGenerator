@@ -1,0 +1,9 @@
+name: WorldGenerator
+main: de.svdragster.worldgenerator.WorldGenerator
+version: 1
+depend: [WorldEdit]
+commands:
+    generate:
+        description: Generate.
+        usage: /<command>
+        permission: generate.command
