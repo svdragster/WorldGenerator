@@ -1,5 +1,6 @@
 package de.svdragster.worldgenerator;
 
+import de.svdragster.worldgenerator.populators.FlowerPopulator;
 import de.svdragster.worldgenerator.populators.TreePopulator;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,7 +23,7 @@ public class Generator extends ChunkGenerator {
 	//This is where you stick your populators - these will be covered in another tutorial
 	@Override
 	public List<BlockPopulator> getDefaultPopulators(World world) {
-		return Arrays.asList((BlockPopulator) new TreePopulator());
+		return Arrays.asList(new TreePopulator(), new FlowerPopulator());
 	}
 	//This needs to be set to return true to override minecraft's default behaviour
 	@Override
@@ -86,6 +87,8 @@ public class Generator extends ChunkGenerator {
 		}
 	}
 	
+	private int multitude = 10; //how much we multiply the value between -1 and 1. It will determine how "steep" the hills will be.
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public byte[][] generateBlockSections(World world, Random dontuse, int ChunkX, int ChunkZ, BiomeGrid biome) {
@@ -99,7 +102,6 @@ public class Generator extends ChunkGenerator {
 				int realZ = z + ChunkZ * 16; //different values each chunk
 				double frequency = 0.5; // the reciprocal of the distance between points
 				double amplitude = 0.5; // The distance between largest min and max values
-				int multitude = 32; //how much we multiply the value between -1 and 1. It will determine how "steep" the hills will be.
 				int sea_level = 64;
 				
 				double maxHeight = gen1.noise(realX, realZ, frequency, amplitude) * multitude + sea_level;
@@ -112,6 +114,16 @@ public class Generator extends ChunkGenerator {
 						setBlock(x, y, z, chunk, Material.STONE);
 					}
 				}
+			}
+		}
+		int r = rand.nextInt(10);
+		if (r <= 1) {
+			if (multitude < 20) {
+				multitude += 1;
+			}
+		} else if (r <= 3) {
+			if (multitude > 4) {
+				multitude -= 1;
 			}
 		}
 		return chunk;
